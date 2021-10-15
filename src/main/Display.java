@@ -6,6 +6,7 @@ public class Display
 {
 	public static void main(String[] args) throws FileNotFoundException{
 		ReadFile f = new ReadFile("test.txt");
-		System.out.print(f.toString());
+		//f.printNRFID();
+		f.printFRID();
 	}
 }

@@ -9,6 +9,10 @@ public class ReadFile {
 	int numNFR = 0;
 	ArrayList<String> frs = new ArrayList<String>();
 	ArrayList<String> nfrs = new ArrayList<String>();
+	ArrayList<String> frsID = new ArrayList<String>();
+	ArrayList<String> nfrsID = new ArrayList<String>();
+	ArrayList<String> frsInfo = new ArrayList<String>();
+	ArrayList<String> nfrsInfo = new ArrayList<String>();
 	Scanner scan;
 	
 	public ReadFile(String p) throws FileNotFoundException
@@ -17,6 +21,8 @@ public class ReadFile {
 		file = new File(path);
 	    scan = new Scanner(file);
 	    this.readFRsAndNFRs();
+	    this.setFRIDs();
+	    this.setNFRIDs();
 	//    this.readNFRs();
 	}
 	
@@ -52,6 +58,33 @@ public class ReadFile {
 		
 	}
 	*/
+	
+	private void setNFRIDs() 
+	{
+		for(int i = 0; i < nfrs.size(); i++) 
+		{
+			nfrsID.add(nfrs.get(i).substring(0,4));
+		}
+	}
+	
+	private void setFRIDs() 
+	{
+		for(int i = 0; i < frs.size(); i++) 
+		{
+			int x = frs.get(i).indexOf(":");
+			frsID.add(frs.get(i).substring(0,x));
+		}
+	}
+	
+	private void setNFRsInfo() 
+	{
+		for(int i = 0; i < nfrs.size(); i++) 
+		{
+			
+			nfrsInfo.add(nfrs.get(i).substring(0,4));
+		}
+	}
+	
 	public ArrayList<String> getFRs()
 	{
 		return frs;
@@ -60,6 +93,22 @@ public class ReadFile {
 	public ArrayList<String> getNFRs() 
 	{
 		return nfrs;	
+	}
+	
+	public void printNRFID() 
+	{
+		for(int i = 0; i < nfrsID.size(); i++) 
+		{
+			System.out.println(nfrsID.get(i));
+		}
+	}
+	
+	public void printFRID() 
+	{
+		for(int i = 0; i < frsID.size(); i++) 
+		{
+			System.out.println(frsID.get(i));
+		}
 	}
 	
 	public String toString() 
