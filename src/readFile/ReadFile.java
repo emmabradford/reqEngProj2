@@ -11,8 +11,8 @@ public class ReadFile {
 	ArrayList<String> nfrs = new ArrayList<String>();
 	ArrayList<String> frsID = new ArrayList<String>();
 	ArrayList<String> nfrsID = new ArrayList<String>();
-	ArrayList<String> frsInfo = new ArrayList<String>();
-	ArrayList<String> nfrsInfo = new ArrayList<String>();
+	ArrayList<ArrayList<String>> frsInfo = new ArrayList<ArrayList<String>>();
+	ArrayList<ArrayList<String>> nfrsInfo = new ArrayList<ArrayList<String>>();
 	Scanner scan;
 	
 	public ReadFile(String p) throws FileNotFoundException
@@ -23,6 +23,8 @@ public class ReadFile {
 	    this.readFRsAndNFRs();
 	    this.setFRIDs();
 	    this.setNFRIDs();
+	    this.setNFRsInfo();
+	    this.setFRsInfo();
 	//    this.readNFRs();
 	}
 	
@@ -80,8 +82,33 @@ public class ReadFile {
 	{
 		for(int i = 0; i < nfrs.size(); i++) 
 		{
-			
-			nfrsInfo.add(nfrs.get(i).substring(0,4));
+			String[] s  = nfrs.get(i).split(" ");
+			ArrayList<String> temp = new ArrayList<String>();
+			for (int x = 2; x< s.length; x++) 
+			{
+				//if you want to remove the,a , etc do this in if statments
+				//before adding to array list
+				temp.add(s[x]);
+			}
+			nfrsInfo.add(temp);
+			//nfrsInfo.add(nfrs.get(i).substring(0,4));
+		}
+	}
+	
+	private void setFRsInfo() 
+	{
+		for(int i = 0; i < frs.size(); i++) 
+		{
+			String[] s  = frs.get(i).split(" ");
+			ArrayList<String> temp = new ArrayList<String>();
+			for (int x = 2; x< s.length; x++) 
+			{
+				//if you want to remove the,a , etc do this in if statments
+				//before adding to array list
+				temp.add(s[x]);
+			}
+			frsInfo.add(temp);
+			//nfrsInfo.add(nfrs.get(i).substring(0,4));
 		}
 	}
 	
@@ -94,6 +121,26 @@ public class ReadFile {
 	{
 		return nfrs;	
 	}
+	
+	public ArrayList<String> getNFRsID() 
+	{
+		return nfrsID;	
+	}
+	
+	public ArrayList<String> getFRsID()
+	{
+		return frsID;
+	}	
+	
+	public ArrayList<ArrayList<String>> getNFRsInfo() 
+	{
+		return nfrsInfo;	
+	}
+	
+	public ArrayList<ArrayList<String>> getFRsInfo()
+	{
+		return frsInfo;
+	}	
 	
 	public void printNRFID() 
 	{
@@ -108,6 +155,30 @@ public class ReadFile {
 		for(int i = 0; i < frsID.size(); i++) 
 		{
 			System.out.println(frsID.get(i));
+		}
+	}
+	
+	public void printNFRInfo() 
+	{
+		for(int i = 0; i < nfrsInfo.size(); i++) 
+		{
+			for(int x = 0; x < nfrsInfo.get(i).size(); x++) 
+			{
+				System.out.println(nfrsInfo.get(i).get(x));
+			}
+			System.out.println();
+		}
+	}
+	
+	public void printFRInfo() 
+	{
+		for(int i = 0; i < frsInfo.size(); i++) 
+		{
+			for(int x = 0; x < frsInfo.get(i).size(); x++) 
+			{
+				System.out.println(frsInfo.get(i).get(x));
+			}
+			System.out.println();
 		}
 	}
 	
