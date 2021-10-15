@@ -22,22 +22,21 @@ public class ReadFile {
 	
 	public void readFRsAndNFRs()
 	{
-		boolean foundBlank = false;
+		boolean isF = false;
 		while(scan.hasNextLine()) 
 		{
-			if(foundBlank) 
+			String line = scan.nextLine();
+			
+			if(!line.isEmpty()) 
 			{
-				frs.add("");
-			}
-			else 
-			{
-				if("".equals(""))//check for blank line 
+				isF = line.substring(0, 1).equals("F");
+				if(isF) 
 				{
-					foundBlank = true;
+					frs.add(line);
 				}
 				else 
 				{
-					nfrs.add("");		
+					nfrs.add(line);		
 				}
 			}
 		}
@@ -61,6 +60,21 @@ public class ReadFile {
 	public ArrayList<String> getNFRs() 
 	{
 		return nfrs;	
+	}
+	
+	public String toString() 
+	{
+		String ans = "nfrs: \n";
+		for(int i = 0; i < nfrs.size(); i++) 
+		{
+			ans += nfrs.get(i) + "\n";
+		}
+		ans = "frs: /n";
+		for(int i = 0; i < frs.size(); i++) 
+		{
+			ans += frs.get(i) + "\n";
+		}
+		return ans;
 	}
 	
 }
