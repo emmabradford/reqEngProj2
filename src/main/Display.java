@@ -11,6 +11,9 @@ public class Display
 	private static ArrayList<ArrayList<String>> FRS;
 	public static void main(String[] args) throws FileNotFoundException{
 		f = new ReadFile("test.txt");
+		//f = new ReadFile("run 1");
+		//f = new ReadFile("run 2");
+		//f = new ReadFile("run 3");
 		//f.printNRFID();
 		//f.printFRID();
 		//f.printFRInfo();
@@ -151,18 +154,32 @@ public class Display
 	private static ArrayList<Cluster> clustering(ArrayList<ArrayList<String>> frs)
 	{
 		int clusterCount = frs.size();
-		ArrayList<Cluster> c = new ArrayList<Cluster>();
+		double maxSim=0.0;
+		int maxR = 0;
+		int maxC = 0;
+		ArrayList<Cluster> cl = new ArrayList<Cluster>();
 		double[][] m = new double[clusterCount][clusterCount]; 
 		m = calcSimFRS(frs);
 		printM(m);
 		while (clusterCount> 8) 
 		{
+			for(int r = 0; r< m.length; r++) 
+			{
+				for(int c = 0; c < m[r].length; c++) 
+				{
+					//if c and r are in diffent clusters
+						//if m[r][c] > maxSim && m[r][c] != 1.0
+							//maxSim = m[r][c];
+							//maxR = r;
+							//maxC =r;
+				}
+			}
+			//merge cluster r with cluster c
+			//cluster count --;
 			
-			//cacluate distances of clusters
-			//merge closest clusters
 		}
 		
-		return null;
+		return cl;
 	}
 	
 	
