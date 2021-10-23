@@ -8,30 +8,36 @@ public class Display
 {
 	public static String[][] matrix;
 //	private static ReadFile f;
-	private static ArrayList<ArrayList<String>> FRS;
-	private static ArrayList<ArrayList<String>> NFRS;
+	//private static ArrayList<ArrayList<String>> FRS;
+	//private static ArrayList<ArrayList<String>> NFRS;
 	public static void main(String[] args) throws FileNotFoundException{
 		ReadFile f = new ReadFile("test.txt");
+		
 		//f = new ReadFile("run 1");
 		//f = new ReadFile("run 2");
 		//f = new ReadFile("run 3");
 		//f.printNRFID();
 		//f.printFRID();
-		//f.printNFRInfo();
-		FRS = f.getFRsInfo();
-		NFRS = f.getNFRsInfo();
+		f.printNFRInfo();
+		f.printFRInfo();
+		//FRS = f.getFRsInfo();
+		//NFRS = f.getNFRsInfo();
 		//System.out.println(NFRS.size());
 		int s = f.getFRsInfo().size();
 		int ns = f.getNFRsInfo().size();
+		ArrayList<ArrayList<String>> nfrsInfo = f.getNFRsInfo();
+		ArrayList<ArrayList<String>> frsInfo = f.getFRsInfo();
 		for(int i = 0; i< ns; i++) 
 		{
-			System.out.println(FRS.size());
-			System.out.println(f.getFRsInfo().size());
-			
+			//System.out.println(FRS.size());
+			//System.out.println(f.getFRsInfo().size());
+			//f.printFRInfo();
+			System.out.println(ns);
+			//System.out.println(frsInfo);
 			//System.out.println("0");
 			//clusteringForANFR(0, s);
 			System.out.println(i);
-			clusteringForANFR(i, s, ns, f);
+			clusteringForANFR(i, s, ns, nfrsInfo, frsInfo);
 		}		
 		//sim(f, f.getFRsInfo().get(0), f.getFRsInfo().get(1));
 		
@@ -98,14 +104,21 @@ public class Display
 		return tf(x, term) * idf(docs, term);
 	}
 	
-	private static double sim(ArrayList<String> a, ArrayList<String> b, ReadFile f) 
+	private static double sim(ArrayList<String> a, ArrayList<String> b, ArrayList<ArrayList<String>> frsInfo, ArrayList<ArrayList<String>> nfrsInfo, int s, int ns) 
 	{
+		//System.out.println(s);
 		double ans = 0;
 		//add nfrs to docs
-		ArrayList<ArrayList<String>> docs = f.getFRsInfo();
-		for (ArrayList<String> q: f.getNFRsInfo()) 
+		ArrayList<ArrayList<String>> docs = new ArrayList<ArrayList<String>>();
+		
+		for (int i = 0; i< s; i++) 
 		{
-			docs.add(q);
+			docs.add(frsInfo.get(i));
+		}
+		
+		for (int i = 0; i< ns; i++) 
+		{
+			docs.add(nfrsInfo.get(i));
 		}
 		
 		ArrayList<String> words = new ArrayList<String>();
@@ -134,28 +147,29 @@ public class Display
 		return ans;
 	}
 	
-	private static double[][] calcSim(int s, int ns, ReadFile f)
+	private static double[][] calcSim(int s, int ns, ArrayList<ArrayList<String>> frsInfo, ArrayList<ArrayList<String>> nfrsInfo)
 	{
+		System.out.println(s);
 		double[][] m = new double[ns][s];
 		for(int r = 0; r< m.length; r++) 
 		{
 			for(int c = 0; c < m[r].length; c++) 
 			{
-				m[r][c] = sim(f.getNFRsInfo().get(r), f.getFRsInfo().get(c), f);
+				m[r][c] = sim(nfrsInfo.get(r), frsInfo.get(c), frsInfo, nfrsInfo, s, ns);
 			}
 		}
 		return m;
 	}
 	
 	//clustering
-	private static ArrayList<Cluster> clusteringForANFR(int nfr, int s, int ns, ReadFile f)
+	private static ArrayList<Cluster> clusteringForANFR(int nfr, int s, int ns, ArrayList<ArrayList<String>> nfrsInfo, ArrayList<ArrayList<String>> frsInfo)
 	{
 		///DONT COMPARE FR TO FR 
 		//COMPARE FR TO NFR
 		//CLUSTER BASED ON SIM OF FRS TO NFR1
 		
-		System.out.println(nfr);
-		
+		System.out.println(s);
+		//System.out.println(frsInfo);
 		int clusterCount = s;
 		//System.out.println(clusterCount);
 		//System.out.println(FRS);
@@ -166,7 +180,7 @@ public class Display
 		//CHANGE TO 1 D MATRIX OR 2D OF SIZE CLUSTER COUNT x 3 OR 4
 		double[][] m1 = new double[s][ns];
 		int[] clusterNum = new int[s];
-		m1 = calcSim(s, ns, f);
+		m1 = calcSim(s, ns, frsInfo, nfrsInfo);
 		//System.out.println(FRS);
 		//printM(m1);
 		double[] m = m1[nfr];

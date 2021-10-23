@@ -78,7 +78,7 @@ public class ReadFile {
 		}
 	}
 	
-	private void setNFRsInfo() 
+	public void setNFRsInfo() 
 	{
 		for(int i = 0; i < nfrs.size(); i++) 
 		{
@@ -95,7 +95,7 @@ public class ReadFile {
 		}
 	}
 	
-	private void setFRsInfo() 
+	public void setFRsInfo() 
 	{
 		for(int i = 0; i < frs.size(); i++) 
 		{
@@ -176,7 +176,7 @@ public class ReadFile {
 		{
 			for(int x = 0; x < frsInfo.get(i).size(); x++) 
 			{
-				System.out.println(frsInfo.get(i).get(x));
+				System.out.print(frsInfo.get(i).get(x)+ ",");
 			}
 			System.out.println();
 		}
@@ -189,7 +189,7 @@ public class ReadFile {
 		{
 			ans += nfrs.get(i) + "\n";
 		}
-		ans = "frs: /n";
+		ans = "frs: \n";
 		for(int i = 0; i < frs.size(); i++) 
 		{
 			ans += frs.get(i) + "\n";
