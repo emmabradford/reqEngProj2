@@ -10,7 +10,8 @@ public class Display
 //	private static ReadFile f;
 	//private static ArrayList<ArrayList<String>> FRS;
 	//private static ArrayList<ArrayList<String>> NFRS;
-	public static void main(String[] args) throws FileNotFoundException{
+	public static void main(String[] args) throws FileNotFoundException, IOException
+	{
 		ReadFile f = new ReadFile("test.txt");
 		
 		//f = new ReadFile("run 1");
@@ -18,13 +19,21 @@ public class Display
 		//f = new ReadFile("run 3");
 		//f.printNRFID();
 		//f.printFRID();
-		f.printNFRInfo();
-		f.printFRInfo();
+		//f.printNFRInfo();
+		//f.printFRInfo();
 		//FRS = f.getFRsInfo();
 		//NFRS = f.getNFRsInfo();
 		//System.out.println(NFRS.size());
 		int s = f.getFRsInfo().size();
 		int ns = f.getNFRsInfo().size();
+		int rows = s;
+		int cols = ns+1;
+		matrix = new String[rows][cols];
+		for(int r = 0; r< rows; r++) 
+		{
+			System.out.println(f.getFRsID());
+			matrix[r][0] = f.getFRsID().get(r);
+		}
 		ArrayList<ArrayList<String>> nfrsInfo = f.getNFRsInfo();
 		ArrayList<ArrayList<String>> frsInfo = f.getFRsInfo();
 		for(int i = 0; i< ns; i++) 
@@ -37,10 +46,21 @@ public class Display
 			//System.out.println("0");
 			//clusteringForANFR(0, s);
 			System.out.println(i);
-			clusteringForANFR(i, s, ns, nfrsInfo, frsInfo);
+			ArrayList<Cluster> cl = clusteringForANFR(i, s, ns, nfrsInfo, frsInfo);
+			
+			for (int x = 0; x< 8; x++) 
+			{
+				Object[] keys = (cl.get(x).getHashMap().keySet().toArray());
+				for(int k = 0; k< keys.length; k++) 
+				{
+					matrix[(Integer)(keys[k])][i+1] = cl.get(x).getPass();
+				}
+				//create a function to calculate the 0 or 1
+				//matrix[r][i+1] = 			
+			}
 		}		
 		//sim(f, f.getFRsInfo().get(0), f.getFRsInfo().get(1));
-		
+		/*
 		int cols = f.getNFRs().size()+1;
 		int rows = f.getFRs().size();
 		matrix = new String[rows][cols];
@@ -59,7 +79,8 @@ public class Display
 				}
 			}
 		}
-		//write2File(rows, cols);
+		*/
+		write2File(s, ns+1);
 	}
 	
 	//finish this method
@@ -265,6 +286,7 @@ public class Display
 				{
 					//cl.get(x).setClusterNumber(clusters[i]);
 					cl.get(x).addHashMapItem(i, data[i]);
+					cl.get(x).findRepresentative();
 					break;
 				}
 				else 
@@ -273,20 +295,88 @@ public class Display
 					{
 						cl.get(x).setClusterNumber(clusters[i]);
 						cl.get(x).addHashMapItem(i, data[i]);
+						cl.get(x).findRepresentative();
 						break;
 					}
 				}
 			}
 		}
+		rankClusterse(cl);
 		printClusters(cl);
 		return cl;
+	}
+	
+	private static void rankClusterse(ArrayList<Cluster> cl) 
+	{
+		double[] arr = new double[8];
+		int n = arr.length;
+		for (int x = 0; x< cl.size(); x++) 
+		{
+			//arr[i] = c.getRepData();
+			arr[x] = cl.get(x).getRepData();
+			//System.out.println(cl.get(x).getRepData());
+		}
+
+		for(int i=0; i < n; i++) 
+		{
+			System.out.println(arr[i]);
+		}
+		
+		System.out.println("highest to lowest");
+		//smallest to greatest
+		double temp = arr[0];
+		for(int i=0; i < n; i++) 
+		{
+			for(int j=1; j < (n-i); j++) 
+			{
+				if(arr[j-1] > arr[j])
+				{  
+					temp = arr[j-1];  
+					arr[j-1] = arr[j];  
+					arr[j] = temp;  
+				}
+			}
+		}
+		
+		for(int i=0; i < n; i++) 
+		{
+			System.out.println(arr[i]);
+		}
+		
+		for(Cluster c: cl) 
+		{
+			for(int i=0; i < 8; i++) 
+			{
+				if(c.getRepData() == arr[i]) 
+				{
+					c.setRank(i);
+				}
+			}
+		}
+		
+		setClusterRank(cl);
+	}
+	
+	private static void setClusterRank(ArrayList<Cluster> cl) 
+	{
+		for(int x = 0; x< cl.size(); x++) 
+		{
+			if(cl.get(x).getRank()<=2) 
+			{
+				cl.get(x).setPass(false);
+			}
+			else 
+			{
+				cl.get(x).setPass(true);
+			}
+		}
 	}
 	
 	private static void printClusters(ArrayList<Cluster> x) 
 	{
 		for (Cluster m: x) 
 		{
-			System.out.println(m.print());
+			System.out.println(m.toString());
 		}
 	}
 	
@@ -310,10 +400,14 @@ public class Display
 			System.out.println(ans);
 		}
 	}
+
 	
 	//change this to write to a file
-	private static void write2File(int rows, int cols) 
+	private static void write2File(int rows, int cols) throws IOException
 	{
+		File run = new File("reults.txt");
+		FileWriter w = new FileWriter("results.txt");
+		
 		for (int r = 0; r< rows; r++) 
 		{
 			String ans = "";
@@ -329,6 +423,9 @@ public class Display
 				}
 			}
 			System.out.println(ans);
+			w.write(ans+"\n");
 		}
+		w.close();
 	}
+
 }

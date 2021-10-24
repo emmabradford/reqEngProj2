@@ -9,10 +9,16 @@ public class Cluster
 	private String pass = "";
 	int rank = 0;
 	int clusterNumber = 10;
+	double repData = 0.0;
 	
 	public Cluster(/*HashMap<Integer, Double> m*/)
 	{
 		//info = m;
+	}
+	
+	public double getRepData() 
+	{
+		return info.get(rep);
 	}
 	
 	public HashMap<Integer, Double> getHashMap()
@@ -57,7 +63,18 @@ public class Cluster
 	
 	public void findRepresentative() 
 	{
-		
+		Object[] k = info.keySet().toArray();
+		Integer m = (Integer)(k[0]);
+		double max = info.get(m);
+		for (Map.Entry<Integer, Double> set : info.entrySet()) 
+		{
+			if(set.getValue() > max) 
+			{
+				max = set.getValue();
+				m = set.getKey();
+			}
+		}
+		rep = m;
 	}
 	
 	public int getRank() 
@@ -100,7 +117,7 @@ public class Cluster
 		}
 	}
 	
-	public String print() 
+	public String toString() 
 	{
 		String ans = "";
 		ans += "cluster number: " + clusterNumber + "\n";
